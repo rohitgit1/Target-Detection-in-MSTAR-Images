@@ -1,0 +1,8 @@
+flask==2.0.1
+tensorflow-cpu==2.5.0
+tensorflow_hub==0.12.0
+matplotlib==3.4.2
+numpy==1.19.5
+scipy==1.7.0
+pandas==1.1.1
+gunicorn==20.0.4
