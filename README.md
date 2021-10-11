@@ -26,3 +26,6 @@ Synthetic Aperture Radar(SAR) is an imaging radar that transmits microwaves whic
     2) git clone -Clone the repository to your local machine
       (git clone https://github.com/<your-github-username>/rohitgit1/Target-Detection-in-MSTAR-Images.git)
 ```    
+
+References and Credits : 1. https://github.com/hunterlew/mstar_with_machine_learning
+                         2. https://github.com/shuibao/CNN_MSTAR
