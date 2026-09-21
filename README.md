@@ -240,6 +240,36 @@ Target-Detection-in-MSTAR-Images/
 └── README.md                      # Comprehensive documentation
 ```
 
+
+---
+
+## ❄️ Snowflake Data Cloud & Cortex AI Integration
+
+This repository includes a production-ready enterprise integration leveraging the latest **2025/2026 Snowflake AI & Data Cloud features**:
+
+1. **Snowflake Cortex Analyst (Text-to-SQL)**:
+   - Includes a production YAML semantic data model (`mstar_atr/snowflake/mstar_semantic_model.yaml`) designed for upload to Snowflake Stages (e.g. `@SEMANTIC_MODELS_STAGE`).
+   - Translates natural language questions into verified, zero-hallucination Snowflake SQL for querying radar telemetry and target detection records.
+2. **Snowflake Cortex Search (Hybrid Vector + Lexical RAG)**:
+   - Managed vector embedding and keyword retrieval service over tactical intelligence doctrines, NATO target catalogs, and SAR dihedral scattering analyses.
+3. **Snowflake Cortex Complete (LLM Tactical Debrief)**:
+   - Uses `SNOWFLAKE.CORTEX.COMPLETE('mistral-large', ...)` to generate automated military-grade intelligence summaries from radar detection confidences and Grad-CAM scatterer locations.
+4. **Snowflake Model Registry (Snowpark ML)**:
+   - Native logging, versioning, and deployment of PyTorch `A-ConvNet` and `ResNet-18` models with inference signatures.
+5. **Apache Iceberg v3 Tables**:
+   - DDL for native Iceberg tables (`SAR_SENSOR_CHIPS_ICEBERG`) to store massive radar amplitude chips in open table format with automated storage maintenance.
+6. **Streamlit in Snowflake (SiS) with SPCS Container Runtime**:
+   - Run this tactical radar console natively inside Snowflake backed by Snowpark Container Services (SPCS) GPU compute pools (`GPU_NV_S`).
+
+### 1-Click Snowflake Deployment
+
+To deploy the entire database, tables, Cortex Search service, and semantic model stage to Snowflake:
+
+```sql
+-- Run in Snowflake Snowsight Worksheet or SnowSQL CLI:
+!source mstar_atr/snowflake/deploy_snowflake.sql;
+```
+
 ---
 
 ## 📖 Citation & References

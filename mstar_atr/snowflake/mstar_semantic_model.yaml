@@ -1,0 +1,120 @@
+# Snowflake Cortex Analyst Semantic Data Model for MSTAR SAR ATR Telemetry
+# Stage Location: @AUTOMOTIVE_INTELLIGENCE.PUBLIC.SEMANTIC_MODELS_STAGE/mstar_semantic_model.yaml
+# Specification: Snowflake Cortex Analyst v1.0
+
+name: mstar_sar_atr_intelligence
+description: "Semantic data model for Synthetic Aperture Radar (SAR) automatic target detection telemetry, vehicle classifications, and radar cross section analytics."
+
+tables:
+  - name: SAR_TARGET_DETECTIONS
+    base_table:
+      database: MSTAR_RADAR_DB
+      schema: ANALYTICS
+      table: SAR_TARGET_DETECTIONS
+    description: "Contains individual SAR radar contact classification events with sensor angles, physical target specs, and model confidences."
+
+    dimensions:
+      - name: DETECTION_ID
+        synonyms: ["contact id", "target detection id", "sensor track id"]
+        description: "Unique identifier for the radar detection event"
+        expr: DETECTION_ID
+        data_type: VARCHAR
+        unique: true
+
+      - name: SENSOR_ID
+        synonyms: ["radar satellite", "sensor platform", "orbiting radar"]
+        description: "Identifier of the radar collection sensor or satellite"
+        expr: SENSOR_ID
+        data_type: VARCHAR
+
+      - name: PREDICTED_CLASS
+        synonyms: ["target type", "classified vehicle", "detected vehicle", "military asset"]
+        description: "Model classified vehicle code (e.g. T72, BMP2, BTR70, 2S1, ZSU234)"
+        expr: PREDICTED_CLASS
+        data_type: VARCHAR
+        sample_values: ["T72", "BMP2", "BTR70", "2S1", "ZSU234", "T62", "BRDM2", "BTR60", "D7", "ZIL131"]
+
+      - name: TRUE_CLASS
+        synonyms: ["ground truth", "verified vehicle"]
+        description: "Ground truth target vehicle label from benchmark reconnaissance"
+        expr: TRUE_CLASS
+        data_type: VARCHAR
+
+      - name: TARGET_CATEGORY
+        synonyms: ["vehicle category", "target role", "military branch"]
+        description: "High-level classification (e.g. Main Battle Tank, Infantry Fighting Vehicle, Artillery, Air Defense)"
+        expr: TARGET_CATEGORY
+        data_type: VARCHAR
+        sample_values: ["Main Battle Tank", "Infantry Fighting Vehicle", "Armored Personnel Carrier", "Artillery", "Anti-Aircraft Weapon"]
+
+      - name: SECTOR
+        synonyms: ["operational sector", "grid sector", "defense zone"]
+        description: "Operational defense grid sector where the target was imaged"
+        expr: SECTOR
+        data_type: VARCHAR
+        sample_values: ["Sector-Alpha (North)", "Sector-Bravo (Ridge)", "Sector-Charlie (Plain)", "Sector-Delta (Depot)"]
+
+      - name: IS_HIGH_CONFIDENCE
+        synonyms: ["high certainty", "verified contact", "confident detection"]
+        description: "Boolean flag indicating whether the classification confidence is >= 90%"
+        expr: IS_HIGH_CONFIDENCE
+        data_type: BOOLEAN
+
+    time_dimensions:
+      - name: TIMESTAMP
+        synonyms: ["detection time", "scan timestamp", "acquisition time"]
+        description: "Timestamp when the SAR image was captured by the radar receiver"
+        expr: TIMESTAMP
+        data_type: TIMESTAMP_NTZ
+
+    measures:
+      - name: CONFIDENCE
+        synonyms: ["model confidence", "probability score", "certainty score"]
+        description: "Classification probability score assigned by the A-ConvNet deep neural network (0.0 to 1.0)"
+        expr: CONFIDENCE
+        data_type: NUMBER
+        default_aggregation: avg
+
+      - name: RCS_DB
+        synonyms: ["radar cross section", "backscatter intensity", "radar reflectivity"]
+        description: "Estimated Radar Cross Section in decibels (dB)"
+        expr: RCS_DB
+        data_type: NUMBER
+        default_aggregation: avg
+
+      - name: DEPRESSION_ANGLE_DEG
+        synonyms: ["depression angle", "grazing angle", "sensor elevation"]
+        description: "Radar sensor depression angle in degrees (15, 17, 30, 45)"
+        expr: DEPRESSION_ANGLE_DEG
+        data_type: NUMBER
+        default_aggregation: avg
+
+      - name: ASPECT_ANGLE_DEG
+        synonyms: ["target azimuth", "heading angle", "orientation"]
+        description: "Vehicle aspect orientation angle relative to the radar beam (0 to 360 degrees)"
+        expr: ASPECT_ANGLE_DEG
+        data_type: NUMBER
+        default_aggregation: avg
+
+      - name: HULL_LENGTH_M
+        synonyms: ["length", "vehicle size"]
+        description: "Physical hull length in meters"
+        expr: HULL_LENGTH_M
+        data_type: NUMBER
+        default_aggregation: avg
+
+      - name: COMBAT_WEIGHT_TON
+        synonyms: ["armor weight", "vehicle tonnage"]
+        description: "Vehicle combat weight in metric tons"
+        expr: COMBAT_WEIGHT_TON
+        data_type: NUMBER
+        default_aggregation: avg
+
+verified_queries:
+  - name: "High confidence main battle tanks"
+    question: "Which main battle tanks were detected with confidence greater than 90%?"
+    sql: "SELECT DETECTION_ID, PREDICTED_CLASS, CONFIDENCE, RCS_DB, SECTOR, TIMESTAMP FROM MSTAR_RADAR_DB.ANALYTICS.SAR_TARGET_DETECTIONS WHERE TARGET_CATEGORY = 'Main Battle Tank' AND CONFIDENCE >= 0.90 ORDER BY CONFIDENCE DESC;"
+
+  - name: "Target breakdown by operational sector"
+    question: "What is the count of detected vehicles by sector?"
+    sql: "SELECT SECTOR, COUNT(*) AS TOTAL_CONTACTS, COUNT(DISTINCT PREDICTED_CLASS) AS DISTINCT_TARGETS, ROUND(AVG(CONFIDENCE) * 100, 2) AS AVG_CONFIDENCE_PCT FROM MSTAR_RADAR_DB.ANALYTICS.SAR_TARGET_DETECTIONS GROUP BY SECTOR ORDER BY TOTAL_CONTACTS DESC;"
