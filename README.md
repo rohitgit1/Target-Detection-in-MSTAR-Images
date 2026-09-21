@@ -14,27 +14,46 @@ Features state-of-the-art **A-ConvNet** and **ResNet-18 SAR** architectures, cla
 ---
 
 <p align="center">
-  <img width="720" src="https://user-images.githubusercontent.com/45510285/95008284-18dbf100-0636-11eb-9c8e-d5bb3d4fce97.png" alt="MSTAR SAR Radar Imaging Overview">
+  <img width="960" src="assets/screenshots/radar_console_hero.jpg" alt="MSTAR SAR Tactical Defense ATR Console">
 </p>
 
 ---
 
 ## ⚡ Highlights & Modern Upgrades (v2.0)
 
+- **Tactical Defense Radar Console**: Full-featured interactive **Streamlit** web application with dark military HUD styling, real-time target identification, 3D backscatter surface rendering, and intelligence dossiers.
 - **Modern Deep Learning Stack**: Full migration to **PyTorch 2.x** with AdamW, Cosine Annealing learning rate schedules, and mixed precision support.
-- **A-ConvNet Architecture**: Implements the benchmark All-Convolutional Network by *Chen et al.* specifically designed to avoid overfitting to SAR coherent speckle.
+- **A-ConvNet Benchmark Architecture**: Implements the All-Convolutional Network by *Chen et al.* specifically designed to avoid overfitting to SAR coherent speckle.
 - **Radar Explainability (Grad-CAM)**: Visual attention heatmaps reveal whether detections are driven by physical vehicle scattering centers (turrets, gun barrels, dihedral reflections) or background clutter.
 - **SAR Signal Processing**: Built-in adaptive speckle reduction filters (**Lee Filter**, **Frost Filter**, **Median Filter**) and logarithmic dynamic range compression ($20 \log_{10}(\text{amplitude})$).
-- **Tactical Radar Console**: Full-featured interactive **Streamlit** web application for real-time target identification, filter experimentation, and intelligence dossier display.
+- **Interactive 3D Backscatter Topography**: Real-time 3D surface mesh visualization displaying metallic scatterer peaks and radar shadow cavities.
 - **Instant 1-Click Execution**: Bundled sample radar chips for all 10 target classes in `assets/samples/` and an automated synthetic SAR data generator for immediate testing without gigabyte-scale manual downloads.
 - **Unified CLI Tool**: Fast command-line interface (`mstar-atr`) for data preparation, training, evaluation, single-image inference, and launching the web console.
 - **Tested & Packaged**: Standard PEP 621 `pyproject.toml`, 100% passing test suite (`pytest`), and multi-version GitHub Actions CI.
 
 ---
 
+### 🔬 End-to-End SAR ATR & Scatterer Localization Pipeline
+
+<p align="center">
+  <img width="960" src="assets/screenshots/pipeline_flow.png" alt="Multi-Stage SAR Signal Processing and Grad-CAM Pipeline">
+</p>
+
+### 📡 3D Radar Backscatter Topography & Adaptive Speckle Filtering
+
+<p align="center">
+  <img width="960" src="assets/screenshots/gradcam_3d_analysis.jpg" alt="SAR 3D Backscatter Analysis and Grad-CAM Dihedral Reflection Localization">
+</p>
+
+---
+
 ## 🎯 The MSTAR 10-Class Benchmark
 
 The MSTAR dataset is the international gold standard for radar target classification, comprising X-band high-resolution (0.3m x 0.3m) SAR imagery of 10 military ground vehicles:
+
+<p align="center">
+  <img width="960" src="assets/screenshots/mstar_sample_grid.png" alt="MSTAR 10-Class Combat Fleet X-Band Radar Chips">
+</p>
 
 | Index | Target Class | Vehicle Name | Role / Category | Distinctive Radar Signature |
 |:---:|:---|:---|:---|:---|
