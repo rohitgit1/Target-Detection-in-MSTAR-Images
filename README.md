@@ -264,5 +264,13 @@ If you use this repository or code in your research, please cite:
 
 ---
 
+## 🙏 References and Credits
+
+This project acknowledges, builds upon, and credits the foundational open-source work by:
+1. [hunterlew/mstar_with_machine_learning](https://github.com/hunterlew/mstar_with_machine_learning) — MSTAR feature engineering and classical machine learning exploration.
+2. [shuibao/CNN_MSTAR](https://github.com/shuibao/CNN_MSTAR) — Convolutional Neural Network implementations for SAR image target recognition.
+
+---
+
 ## 📄 License
 This project is licensed under the [MIT License](LICENSE).

@@ -307,6 +307,16 @@ st.sidebar.markdown("### 🔍 Grad-CAM Explainability")
 cam_alpha = st.sidebar.slider("Heatmap Blend Alpha", min_value=0.0, max_value=1.0, value=0.45, step=0.05)
 colormap_name = st.sidebar.selectbox("Colormap", ["inferno", "turbo", "plasma", "jet", "viridis"], index=0)
 
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 📚 References & Credits")
+st.sidebar.markdown(
+    """
+    1. [hunterlew/mstar_with_machine_learning](https://github.com/hunterlew/mstar_with_machine_learning)
+    2. [shuibao/CNN_MSTAR](https://github.com/shuibao/CNN_MSTAR)
+    3. [DARPA/AFRL MSTAR Benchmark](https://www.sdms.afrl.af.mil/)
+    """
+)
+
 
 # ---------------------------------------------------------
 # Tab 1: Live Target Analysis
@@ -490,3 +500,20 @@ with tab_physics:
             - **Extended Operating Conditions (EOC)**: Models are evaluated against large depression angle changes (e.g. 30°/45°) or target configuration changes (e.g. tanks with/without auxiliary fuel drums and reactive armor).
             """
         )
+
+# ---------------------------------------------------------
+# Persistent Footer with Credits & References
+# ---------------------------------------------------------
+st.markdown("---")
+st.markdown(
+    """
+    <div style="text-align: center; color: #94a3b8; font-size: 0.85rem; padding: 1.25rem 0; line-height: 1.6;">
+        <span style="font-weight: 700; color: #f1f5f9;">MSTAR SAR Tactical Automatic Target Recognition Console</span> • Modernized by Rohit Singh (<a href="https://github.com/rohitgit1" target="_blank" style="color: #38bdf8; text-decoration: none;">@rohitgit1</a>)<br>
+        <span style="font-weight: 600; color: #cbd5e1;">References & Credits:</span> 
+        <a href="https://github.com/hunterlew/mstar_with_machine_learning" target="_blank" style="color: #00ff9d; text-decoration: none; margin: 0 8px;">1. hunterlew/mstar_with_machine_learning</a> • 
+        <a href="https://github.com/shuibao/CNN_MSTAR" target="_blank" style="color: #00ff9d; text-decoration: none; margin: 0 8px;">2. shuibao/CNN_MSTAR</a>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
