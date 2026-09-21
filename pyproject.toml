@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mstar-atr"
+version = "2.0.0"
+description = "Synthetic Aperture Radar (SAR) Automatic Target Recognition (ATR) suite using PyTorch, A-ConvNet, and Grad-CAM on MSTAR."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Rohit Singh", email = "rohitsingh@example.com" }
+]
+keywords = [
+    "synthetic-aperture-radar",
+    "sar",
+    "mstar",
+    "automatic-target-recognition",
+    "atr",
+    "deep-learning",
+    "pytorch",
+    "aconvnet",
+    "grad-cam",
+    "computer-vision",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "scikit-learn>=1.2.0",
+    "matplotlib>=3.7.0",
+    "pillow>=9.5.0",
+    "streamlit>=1.30.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.4.0",
+]
+
+[project.scripts]
+mstar-atr = "mstar_atr.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/rohitgit1/Target-Detection-in-MSTAR-Images"
+Repository = "https://github.com/rohitgit1/Target-Detection-in-MSTAR-Images.git"
+
+[tool.setuptools.packages.find]
+include = ["mstar_atr*"]

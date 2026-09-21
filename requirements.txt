@@ -1,8 +1,17 @@
-flask==2.0.1
-tensorflow-cpu==2.5.0
-tensorflow_hub==0.12.0
-matplotlib==3.4.2
-numpy==1.19.5
-scipy==1.7.0
-pandas==1.1.1
-gunicorn==20.0.4
+# Modern Deep Learning & SAR Processing Stack
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.2.0
+matplotlib>=3.7.0
+pillow>=9.5.0
+streamlit>=1.30.0
+
+# Optional Web & CLI Utilities
+rich>=13.0.0
+pydantic>=2.0.0
+
+# Testing & Development
+pytest>=7.0.0
+ruff>=0.4.0
