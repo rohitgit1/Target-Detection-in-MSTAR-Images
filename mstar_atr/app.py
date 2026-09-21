@@ -30,12 +30,6 @@ from mstar_atr.interpretation.gradcam import GradCAM, overlay_gradcam_on_sar
 from mstar_atr.models.aconvnet import AConvNet
 from mstar_atr.models.legacy_cnn import LegacyMSTARCNN
 from mstar_atr.models.resnet import build_resnet18_sar
-from mstar_atr.snowflake.cortex import (
-    simulate_cortex_analyst_query,
-    simulate_cortex_search,
-    generate_cortex_tactical_debrief,
-    get_sample_radar_telemetry_df,
-)
 
 
 # ---------------------------------------------------------
@@ -238,8 +232,8 @@ st.markdown(
 )
 
 # Navigation Tabs
-tab_radar, tab_benchmark, tab_physics, tab_snowflake = st.tabs(
-    ["🎯 Live Target Analysis", "📊 Benchmark Comparison", "🔬 SAR Physics & Theory", "❄️ Snowflake Data Cloud & Cortex AI"]
+tab_radar, tab_benchmark, tab_physics = st.tabs(
+    ["🎯 Live Target Analysis", "📊 Benchmark Comparison", "🔬 SAR Physics & Theory"]
 )
 
 # ---------------------------------------------------------
@@ -507,119 +501,6 @@ with tab_physics:
             """
         )
 
-# ---------------------------------------------------------
-# Tab 4: Snowflake Data Cloud & Cortex AI Integration
-# ---------------------------------------------------------
-with tab_snowflake:
-    st.markdown("### ❄️ Enterprise SAR Radar Intelligence on Snowflake Data Cloud")
-    st.markdown(
-        """
-        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem;">
-            <span class="status-badge" style="background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: #38bdf8;">Cortex Analyst (Text-to-SQL)</span>
-            <span class="status-badge" style="background: rgba(168, 85, 247, 0.15); border-color: #a855f7; color: #c084fc;">Cortex Search (Hybrid RAG)</span>
-            <span class="status-badge" style="background: rgba(34, 197, 94, 0.15); border-color: #22c55e; color: #4ade80;">Cortex LLM (Mistral / Llama 3)</span>
-            <span class="status-badge" style="background: rgba(234, 179, 8, 0.15); border-color: #eab308; color: #facc15;">Snowflake Model Registry</span>
-            <span class="status-badge" style="background: rgba(239, 68, 68, 0.15); border-color: #ef4444; color: #f87171;">Apache Iceberg v3 Tables</span>
-            <span class="status-badge" style="background: rgba(6, 182, 212, 0.15); border-color: #06b6d4; color: #22d3ee;">SiS + SPCS GPU Container Runtime</span>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    sf_subtab1, sf_subtab2, sf_subtab3, sf_subtab4, sf_subtab5 = st.tabs([
-        "💬 Cortex Analyst (Semantic Text-to-SQL)",
-        "🔎 Cortex Search (Tactical RAG)",
-        "🛡️ Cortex LLM Tactical Debrief",
-        "⚙️ Snowflake Deployment DDL",
-        "📋 Semantic Model YAML",
-    ])
-
-    telemetry_df = get_sample_radar_telemetry_df()
-
-    with sf_subtab1:
-        st.markdown("#### 💬 Snowflake Cortex Analyst: Natural Language Telemetry Querying")
-        st.markdown(
-            "Cortex Analyst utilizes a governed **Semantic Data Model** (dimensions, measures, synonyms) stored on a Snowflake Stage to generate validated, zero-hallucination Snowflake SQL."
-        )
-
-        sample_questions = [
-            "Which main battle tanks were detected with confidence > 90%?",
-            "What is the count of detected vehicles and average confidence by sector?",
-            "Show target classification accuracy across depression angles",
-            "Custom query...",
-        ]
-
-        selected_q = st.selectbox("Select or enter a natural language question:", sample_questions, index=0)
-        if selected_q == "Custom query...":
-            user_q = st.text_input("Enter your question for Cortex Analyst:", "Show high confidence detections with RCS > 20 dB")
-        else:
-            user_q = selected_q
-
-        if st.button("🚀 Execute Cortex Analyst Translation", key="btn_cortex_analyst"):
-            result = simulate_cortex_analyst_query(user_q, telemetry_df)
-            st.markdown(f"**Explanation:** {result['explanation']}")
-            st.markdown("**Generated Snowflake SQL:**")
-            st.code(result["sql"], language="sql")
-            st.markdown(f"**Query Results ({len(result['results'])} rows):**")
-            st.dataframe(result["results"], use_container_width=True)
-
-    with sf_subtab2:
-        st.markdown("#### 🔎 Snowflake Cortex Search: Vector + Keyword RAG over Radar Intelligence")
-        st.markdown(
-            "Cortex Search provides fully-managed semantic embedding and lexical search across tactical radar manuals, scattering center analysis, and NATO vehicle identification doctrine."
-        )
-        search_query = st.text_input(
-            "Search Tactical Reconnaissance Corpus:",
-            value="T-72 turret dihedral scattering centers",
-            key="cortex_search_query",
-        )
-        search_results = simulate_cortex_search(search_query)
-
-        for doc in search_results:
-            st.markdown(
-                f"""
-                <div class="tactical-card" style="margin-bottom: 0.75rem;">
-                    <div style="display: flex; justify-content: space-between;">
-                        <span style="font-weight: 700; color: #38bdf8;">[{doc['doc_id']}] {doc['title']}</span>
-                        <span style="color: #00ff9d; font-size: 0.85rem; font-weight: 700;">Relevance: {doc.get('score', 0.95) * 100:.1f}%</span>
-                    </div>
-                    <div style="color: #94a3b8; font-size: 0.8rem; margin: 4px 0;">Category: {doc['category']}</div>
-                    <div style="color: #e2e8f0; font-size: 0.9rem; margin-top: 6px;">{doc['content']}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-
-    with sf_subtab3:
-        st.markdown("#### 🛡️ Snowflake Cortex Complete: Tactical Intelligence Debrief")
-        st.markdown(
-            "Invokes `SNOWFLAKE.CORTEX.COMPLETE('mistral-large-2407', ...)` or Llama 3 directly inside Snowflake to synthesize the classified radar target, scattering centres, and threat level into an actionable military report."
-        )
-        current_pred = selected_class_label
-        debrief_markdown = generate_cortex_tactical_debrief(current_pred, 0.9845, model_choice)
-        st.markdown(debrief_markdown)
-
-    with sf_subtab4:
-        st.markdown("#### ⚙️ Snowflake Enterprise Production DDL")
-        st.markdown("Complete turnkey deployment script creating Database, Iceberg Tables, Cortex Search, Model Registry, and Streamlit in Snowflake (SiS):")
-        deploy_sql_path = os.path.join(os.path.dirname(__file__), "snowflake", "deploy_snowflake.sql")
-        if os.path.isfile(deploy_sql_path):
-            with open(deploy_sql_path, "r", encoding="utf-8") as f:
-                deploy_sql_content = f.read()
-            st.code(deploy_sql_content, language="sql")
-        else:
-            st.info("Deploy script available at `mstar_atr/snowflake/deploy_snowflake.sql`.")
-
-    with sf_subtab5:
-        st.markdown("#### 📋 Active Cortex Analyst Semantic Model Specification (`mstar_semantic_model.yaml`)")
-        st.markdown("Upload this YAML specification to your Snowflake Stage (e.g. `@SEMANTIC_MODELS_STAGE`) to enable Cortex Analyst:")
-        yaml_path = os.path.join(os.path.dirname(__file__), "snowflake", "mstar_semantic_model.yaml")
-        if os.path.isfile(yaml_path):
-            with open(yaml_path, "r", encoding="utf-8") as f:
-                yaml_content = f.read()
-            st.code(yaml_content, language="yaml")
-        else:
-            st.info("Semantic model YAML located at `mstar_atr/snowflake/mstar_semantic_model.yaml`.")
 
 
 # ---------------------------------------------------------
